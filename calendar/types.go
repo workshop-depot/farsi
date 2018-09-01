@@ -1,4 +1,4 @@
-package persical
+package calendar
 
 //PersianMonth represents a Persian month
 type PersianMonth int32
