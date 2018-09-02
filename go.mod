@@ -1,4 +1,4 @@
-module github.com/dc0d/farsi
+module github.com/dc0d/farsi/v2
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
