@@ -1,5 +1,7 @@
 package calendar
 
+import "time"
+
 //-----------------------------------------------------------------------------
 // private functions
 
@@ -169,7 +171,7 @@ func jd2jg(JD, J1G0 int32) (L, M, N int32) {
 //-----------------------------------------------------------------------------
 // public functions
 
-//PersianToGregorian converts a Persian date to Gregorian date
+// PersianToGregorian converts a Persian date to Gregorian date.
 func PersianToGregorian(pyear, pmonth, pday int) (gyear, gmonth, gday int) {
 	jd := jal2jd(int32(pyear), int32(pmonth), int32(pday))
 	L, M, N := jd2jg(jd, 0)
@@ -177,12 +179,38 @@ func PersianToGregorian(pyear, pmonth, pday int) (gyear, gmonth, gday int) {
 	return
 }
 
-//GregorianToPersian converts a Gregorian date to Persian date
+// GregorianToPersian converts a Gregorian date to Persian date.
 func GregorianToPersian(gyear, gmonth, gday int) (pyear, pmonth, pday int) {
 	jd := jg2jd(int32(gyear), int32(gmonth), int32(gday), 0)
 	L, M, N := jd2jal(jd)
 	pyear, pmonth, pday = int(L), int(M), int(N)
 	return
+}
+
+// IranTime returns the time at the timezone of Iran.
+func IranTime(source time.Time) time.Time {
+	var dest time.Time
+	loc, err := time.LoadLocation("Asia/Tehran")
+	if err == nil {
+		dest = source.In(loc)
+	} else {
+		dest = source
+	}
+	return dest
+}
+
+// IranNow returns the current time at the timezone of Iran.
+func IranNow() time.Time {
+	return IranTime(time.Now())
+}
+
+// Midnight if no time is provided, time.Now() will be used.
+func Midnight(at ...time.Time) time.Time {
+	t := time.Now()
+	if len(at) > 0 {
+		t = at[0]
+	}
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
 
 //-----------------------------------------------------------------------------
